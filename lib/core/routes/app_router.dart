@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
-  static String detailsPath = '/details';
+  static String detailsPath = '/detail/:userId'; // Doğru parametre
   static String homePath = '/';
+
   static final GoRouter router = GoRouter(
+    initialLocation: homePath,
     routes: <GoRoute>[
       GoRoute(
         path: homePath,
@@ -14,7 +16,10 @@ class AppRouter {
       ),
       GoRoute(
         path: detailsPath,
-        builder: (BuildContext context, GoRouterState state) => DetailView(),
+        builder: (BuildContext context, GoRouterState state) {
+          final userId = int.parse(state.pathParameters['userId']!);
+          return DetailView(userId: userId);
+        },
       ),
     ],
   );

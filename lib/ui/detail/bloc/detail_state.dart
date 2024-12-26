@@ -1,6 +1,21 @@
 part of 'detail_bloc.dart';
 
 @immutable
-sealed class DetailState {}
+abstract class DetailState {}
 
-final class DetailInitial extends DetailState {}
+//İnitial state
+class DetailInitial extends DetailState {}
+
+//veri gelmeden önceki state
+class DetailLoadingState extends DetailState {}
+
+//veri geldiğindeki state
+class DetailLoadingSuccessState extends DetailState {
+  DetailLoadingSuccessState({
+    required this.details,
+  });
+  final List<DetailModel> details;
+}
+
+//veri çekilirken hata durumu state
+class DetailErrorState extends DetailState {}
