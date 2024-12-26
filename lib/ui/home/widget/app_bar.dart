@@ -1,4 +1,4 @@
-part of '../home_view.dart';
+part of '../view/home_view.dart';
 
 class _CustomFlatAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override

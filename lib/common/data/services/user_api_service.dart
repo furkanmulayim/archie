@@ -6,7 +6,7 @@ class UserApiService {
 
   Future<List<Map<String, dynamic>>> fetchUsers() async {
     try {
-      final response = await _dio.get('${ApiConstants.usersBaseUrl}');
+      final response = await _dio.get(ApiConstants.usersBaseUrl);
       return List<Map<String, dynamic>>.from(response.data);
     } catch (e) {
       rethrow;

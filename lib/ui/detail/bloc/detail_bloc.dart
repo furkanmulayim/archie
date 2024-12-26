@@ -21,5 +21,6 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       }
     });
   }
+
   final DetailRepository detailRepo;
 }

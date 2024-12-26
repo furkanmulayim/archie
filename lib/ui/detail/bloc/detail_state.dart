@@ -14,6 +14,7 @@ class DetailLoadingSuccessState extends DetailState {
   DetailLoadingSuccessState({
     required this.details,
   });
+
   final List<DetailModel> details;
 }
 

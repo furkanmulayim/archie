@@ -7,5 +7,6 @@ abstract class DetailEvent {}
 class DetailInitialEvent extends DetailEvent {
   //userId ile event başlatmak için
   DetailInitialEvent({required this.userId});
+
   final int userId;
 }

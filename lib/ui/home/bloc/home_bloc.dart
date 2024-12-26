@@ -2,7 +2,6 @@ import 'package:archie/common/data/models/user_model.dart';
 import 'package:archie/common/data/repository/user_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-
 part 'home_event.dart';
 part 'home_state.dart';
 

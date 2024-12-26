@@ -19,6 +19,8 @@ dependencies:
   #State Management
 
   go_router: ^14.6.2
+  meta: ^1.15.0
+  bloc: ^8.1.4
   #Page Navigation  
 
 dev_dependencies:

@@ -2,16 +2,19 @@ import 'package:archie/common/data/models/detail_model.dart';
 import 'package:archie/common/data/repository/detail_repository.dart';
 import 'package:archie/common/data/services/detail_api_service.dart';
 import 'package:archie/core/constants/colores.dart';
+import 'package:archie/core/constants/dimens.dart';
 import 'package:archie/core/constants/texts.dart';
 import 'package:archie/ui/detail/bloc/detail_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-part '../detail/widget/app_bar.dart';
+part '../widget/app_bar.dart';
+part '../widget/detail_card.dart';
 
 class DetailView extends StatefulWidget {
-  const DetailView({super.key, required this.userId});
+  const DetailView({super.key, required this.userId, required this.name});
 
+  final String name;
   final int userId;
 
   @override
@@ -30,10 +33,10 @@ class _DetailViewState extends State<DetailView> {
   @override
   void initState() {
     super.initState();
-    // Widget'ın userId'sine doğrudan widget.userId ile erişebilirsiniz.
     detailBloc = DetailBloc(
       detailRepo: DetailRepository(apiService: DetailApiService()),
     );
+    //initialde parametre göndererek id ile arama request atacağız
     detailBloc.add(DetailInitialEvent(userId: widget.userId));
   }
 
@@ -42,46 +45,22 @@ class _DetailViewState extends State<DetailView> {
     return BlocProvider(
       create: (context) => detailBloc,
       child: Scaffold(
-        appBar: _CustomBackAppBar(),
+        appBar: _CustomBackAppBar(title: widget.name),
         body: BlocBuilder<DetailBloc, DetailState>(
           builder: (context, state) {
             switch (state) {
-              case DetailLoadingState():
+              case DetailLoadingState(): //loading
                 return Center(child: CircularProgressIndicator());
-              case DetailLoadingSuccessState():
+              case DetailLoadingSuccessState(): //success
                 return _LazyList(items: state.details);
-              case DetailErrorState():
+              case DetailErrorState(): //error
                 return Center(child: Text('An error occurred.'));
-              default:
+              default: //default
                 return Center(child: CircularProgressIndicator());
             }
           },
         ),
       ),
-    );
-  }
-}
-
-class _LazyList extends StatelessWidget {
-  const _LazyList({required this.items});
-
-  final List<DetailModel> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colores.grey300,
-            child: Text(item.id.toString()),
-          ),
-          title: Text(item.completed.toString()),
-          onTap: () {},
-        );
-      },
     );
   }
 }

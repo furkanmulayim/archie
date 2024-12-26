@@ -2,12 +2,14 @@ import 'package:archie/common/data/models/user_model.dart';
 import 'package:archie/common/data/repository/user_repository.dart';
 import 'package:archie/common/data/services/user_api_service.dart';
 import 'package:archie/core/constants/colores.dart';
+import 'package:archie/core/constants/dimens.dart';
 import 'package:archie/core/constants/texts.dart';
 import 'package:archie/ui/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-part 'widget/app_bar.dart';
+import 'package:go_router/go_router.dart';
+part '../widget/app_bar.dart';
+part '../widget/user_card.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -20,19 +22,19 @@ class _HomeViewState extends State<HomeView> {
   late final HomeBloc homeBloc;
 
   @override
+  void dispose() {
+    // homeBloc  işlevini tamamladıktan sonra belleği temizlemek için kapatılır.
+    homeBloc.close();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     //bağımlılık azaltmak içinDependency Injection Kullanılabilir İleride
     homeBloc = HomeBloc(userRepo: UserRepository(apiService: UserApiService()));
     //Home initial eventi initial state'te ekledik, bu event verileri almak için başlatır
     homeBloc.add(HomeInitialEvent());
-  }
-
-  @override
-  void dispose() {
-    // homeBloc  işlevini tamamladıktan sonra belleği temizlemek için kapatılır.
-    homeBloc.close();
-    super.dispose();
   }
 
   @override
@@ -44,43 +46,18 @@ class _HomeViewState extends State<HomeView> {
         body: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             switch (state) {
-              case HomeLoadingState():
+              case HomeLoadingState(): //loading
                 return Center(child: CircularProgressIndicator());
-              case HomeLoadingSuccessState():
+              case HomeLoadingSuccessState(): //succes
                 return _LazyList(items: state.users);
-              case HomeErrorState():
+              case HomeErrorState(): //error
                 return Center(child: Text('An error occurred.'));
-              default:
+              default: //default
                 return Center(child: CircularProgressIndicator());
             }
           },
         ),
       ),
-    );
-  }
-}
-
-class _LazyList extends StatelessWidget {
-  const _LazyList({required this.items});
-  final List<UserModel> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colores.grey300,
-            child: Text(item.id.toString()),
-          ),
-          title: Text(item.name),
-          onTap: () {
-            context.go('/detail/${item.id}');
-          },
-        );
-      },
     );
   }
 }

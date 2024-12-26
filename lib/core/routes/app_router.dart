@@ -1,12 +1,13 @@
-import 'package:archie/ui/detail/detail_view.dart';
-import 'package:archie/ui/home/home_view.dart';
+import 'package:archie/ui/detail/view/detail_view.dart';
+import 'package:archie/ui/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
-  static String detailsPath = '/detail/:userId'; // Doğru parametre
-  static String homePath = '/';
+  //params
+  static String detailsPath = '/detail/:userId/:name';
 
+  static String homePath = '/';
   static final GoRouter router = GoRouter(
     initialLocation: homePath,
     routes: <GoRoute>[
@@ -18,7 +19,8 @@ class AppRouter {
         path: detailsPath,
         builder: (BuildContext context, GoRouterState state) {
           final userId = int.parse(state.pathParameters['userId']!);
-          return DetailView(userId: userId);
+          final name = state.pathParameters['name']!;
+          return DetailView(userId: userId, name: name,);
         },
       ),
     ],
